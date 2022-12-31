@@ -1,0 +1,7 @@
+numpy
+tk
+pywin32
+pynput
+undetected-chromedriver
+beautifulsoup4
+selenium
