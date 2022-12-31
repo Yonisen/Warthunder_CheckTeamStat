@@ -44,6 +44,6 @@
 
 <img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen4.png">
 
-### Поддержка
+### Поддержать
 Вы можете поддержать меня здесь:<br>
 https://www.donationalerts.com/r/yonisen
