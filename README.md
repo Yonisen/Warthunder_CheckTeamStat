@@ -25,6 +25,7 @@
 Скрипт будет работать в <b>фоне</b> и ждать от вас сочетания клавиш (по умолчанию Ctrl+J)<br>
 2. Когда попадете на карту, нажмите <b>сочетание клавиш</b> и программа начнет сбор статистики, после чего, на экране появятся результаты:
 <img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen2.png">
+<img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen3.png">
 
 ## Настройка кнопок
 
@@ -32,7 +33,7 @@
 И пропишите нужную вам комбинацию. Не забудьте сохранить изменения.<br>
 Вот образец того, что может быть написано в этом файле:
 
-<img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen3.png">
+<img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen4.png">
 
 Если не знаете, как прописать кнопку мыши, запустите скрипт `testMouse.py` из той же папки и нажмите искомую кнопку<br>
 Он подскажет вам ее правильное название
@@ -43,7 +44,7 @@
 Но если вашему компьютеру сложно одновременно обрабатывать и игру и несколько браузеров, можете вручную выставить их количество<br>
 Для этого в папке с программой откройте файл `cpus.txt` и пропишите туда число (0 значит максимум):
 
-<img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen4.png">
+<img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen5.png">
 
 ### Поддержать
 Вы можете поддержать меня здесь:<br>
