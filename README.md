@@ -15,14 +15,14 @@
 
 Убедитесь, что игра работает в режиме Полноэкранного окна:
 
-<img src="https://github.com/Yonisen/WarThunder_Yellow_Mark_Rangefinder/blob/main/data/1/screen70.jpg">
+<img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen1.png">
 
 ## Запуск
 
 1. В папке с программой двойным кликом выполните скрипт `xvm.py`<br>
 Скрипт будет работать в <b>фоне</b> и ждать от вас сочетания клавиш (по умолчанию Ctrl+J)<br>
 2. Когда попадете на карту, нажмите <b>сочетание клавиш</b> и программа начнет сбор статистики, после чего, на экране появятся результаты:
-<img src="https://github.com/Yonisen/WarThunder_Yellow_Mark_Rangefinder/blob/main/data/1/screen70.jpg">
+<img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen2.png">
 
 ## Настройка кнопок
 
@@ -30,7 +30,7 @@
 И пропишите нужную вам комбинацию. Не забудьте сохранить изменения.<br>
 Вот образец того, что может быть написано в этом файле:
 
-<img src="https://github.com/Yonisen/WarThunder_Yellow_Mark_Rangefinder/blob/main/data/1/screen70.jpg">
+<img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen3.png">
 
 ## Настройка количества процессов
 
@@ -38,7 +38,7 @@
 Но если вашему компьютеру сложно одновременно обрабатывать и игру и несколько браузеров, можете вручную выставить их количество<br>
 Для этого в папке с программой откройте файл `cpus.txt` и пропишите туда число (0 значит максимум):
 
-<img src="https://github.com/Yonisen/WarThunder_Yellow_Mark_Rangefinder/blob/main/data/1/screen70.jpg">
+<img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen4.png">
 
 ### Support
 Вы можете поддержать меня здесь:<br>
