@@ -8,8 +8,8 @@
 - Скачайте и установите <a href="https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe">Python</a><br>
 !!!Вначале установки поставьте галочку "add python.exe to PATH"
 - Скачайте архив репозитория и распакуйте его
-- Перенесите папку `Warthunder_ChekTeamStat` в папку WarThunder
 - Откройте папку `Warthunder_ChekTeamStat` и двойным кликом запустите скрипт `install.py` дождитесь завершения установки<br>
+- Перенесите папку `Warthunder_ChekTeamStat` в папку WarThunder<br>
 
 Эти действия нужно сделать только один раз после скачивания репозитория 
 
