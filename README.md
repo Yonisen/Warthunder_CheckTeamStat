@@ -17,7 +17,7 @@
 
 <img src="https://github.com/Yonisen/Warthunder_ChekTeamStat/blob/main/data/screen1.png">
 
-## Запуск
+## Запуск (Ctrl+J)
 
 1. В папке с программой двойным кликом выполните скрипт `xvm.py`<br>
 Скрипт будет работать в <b>фоне</b> и ждать от вас сочетания клавиш (по умолчанию Ctrl+J)<br>
