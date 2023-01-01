@@ -2,6 +2,7 @@ numpy
 tk
 pywin32
 pynput
-undetected-chromedriver
+undetected-chromedriver==3.2.1
 beautifulsoup4
-selenium
+selenium==4.7.2
+prettytable
