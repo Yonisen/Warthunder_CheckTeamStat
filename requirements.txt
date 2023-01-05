@@ -6,3 +6,4 @@ undetected-chromedriver==3.2.1
 beautifulsoup4
 selenium==4.7.2
 prettytable
+psutil
