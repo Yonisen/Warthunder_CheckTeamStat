@@ -21,8 +21,9 @@ import win32gui
 from contextlib import suppress
 import psutil
 from threading import Timer
-#from time import time
+#import time
 import configparser
+from requests_futures import sessions
 
 driver = 0
 def terminateChrome():
@@ -45,7 +46,7 @@ try:
         #    chrome_options=options
         #)
         try:
-            driver = uc.Chrome(options=options, desired_capabilities=caps)
+            driver = uc.Chrome(version_main=110, options=options, desired_capabilities=caps)
         except AttributeError as e:
             driver = uc.Chrome(options=options, desired_capabilities=caps)
             file = open('error.log', 'a')
@@ -129,111 +130,163 @@ try:
                 #print(i)
             else:
                 raise e            
+        
         if i[1] == '2':
             team2.append(i)
         else:
             team1.append(i)
         #print(i)
         #k = 1
-        for i in teams[1:]:
-            #k+=1
-            #driver.execute_script(f"window.open('about:blank', '{i[0]}');")
-            #if k == 2:
-                #driver.close()
-            #wait.until(EC.number_of_windows_to_be(k))
-            #driver.switch_to.window(i[0])
-            driver.switch_to.new_window('tab')
-            url = 'https://warthunder.ru/ru/community/userinfo/?nick=' + i[0]
-            driver.get(url)
-        for k in range(len(driver.window_handles)-1):
-            k = k+1
-            #print(driver.window_handles[k])
-            i = teams[k]
-            driver.switch_to.window(driver.window_handles[1])
-            try:
-                wait.until(EC.presence_of_element_located((By.ID, "toTop")))
-                soup = BeautifulSoup(driver.page_source, "html.parser")
-                #print(soup)
-                #allNews = soup.findAll('a', class_='lenta')
-                #elements1=soup.find_all(attrs={"class":{"ownershipPeriods-from"}})
-                #user-stat__list-row
-                #soup.select('li:nth-of-type(3)')
-                divs = soup.findAll('div', class_='user-stat__list-row')
-                if len(divs) == 0:
-                    i = np.append(i, 50)
-                    i = np.append(i, 0)
-                    i = np.append(i, "-")
-                    i = np.append(i, "-")
-                    #print(i) 
-                else:   
-                    wins = divs[0].select('li:nth-of-type(2)')
-                    battles = divs[0].select('li:nth-of-type(3)')
-                    
-                    wins = wins[diffNumber].text
-                    if wins == "N/A":
-                        wins = 0
-                    battles = battles[diffNumber].text
-                    if battles == "N/A" or battles == "0":
-                        battles = 1
-                    #print(battles)
-                    #print(wins)
-                    winrate = round(int(wins)/int(battles)*100, 2)
-                    if winrate == 0:
-                        winrate = 50
-                    
-                    awins = divs[0].select('li:nth-last-of-type(3)')   
-                    twins = divs[0].select('li:nth-last-of-type(2)')
-                    mwins = divs[0].select('li:nth-last-of-type(1)')
-                    
-                    awins = awins[diffNumber].text
-                    if awins == "N/A":
-                        awins = 0 
-                    twins = twins[diffNumber].text
-                    if twins == "N/A":
-                        twins = 0 
-                    mwins = mwins[diffNumber].text
-                    if mwins == "N/A":
-                        mwins = 0      
-                    sumwins = int(awins)+int(twins)+int(mwins)
-                    kd = round(sumwins/int(battles), 2) 
-                    
-                    timeIstr = divs[1].select('li:nth-of-type(6)')
-                    timesShturm = divs[1].select('li:nth-of-type(8)')
-                    
-                    timeIstr = timeIstr[diffNumber].text
-                    if timeIstr == "N/A":
-                        timeIstr = '-'   
-                    timesShturm = timesShturm[diffNumber].text
-                    if timesShturm == "N/A":
-                        timesShturm = '-'
-                        
-                    i = np.append(i, winrate)
-                    i = np.append(i, kd)
-                    i = np.append(i, timeIstr)
-                    i = np.append(i, timesShturm)
-            except Exception as e:
-                if type(e)==TimeoutException:
-                    i = np.append(i, 50)
-                    i = np.append(i, 0)
-                    i = np.append(i, "-")
-                    i = np.append(i, "-")
-                    #print(i)
-                else:
-                    raise e
-            driver.close()                     
-            if i[1] == '2':
-                team2.append(i)
-            else:
-                team1.append(i)                
-            #print(i)
+        
+        session = sessions.FuturesSession(max_workers=32)
+
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'accept-encoding':'gzip, deflate, br',
+            'accept-language': 'ru,en;q=0.9',
+            'cache-control': 'no-cache',
+            'pragma': 'no-cache',
+            'upgrade-insecure-requests': '1',
+        } 
+        
+        all_cookies = driver.get_cookies()
+        cookies = ''
+        for cookie in all_cookies:
+            cookies += cookie['name'] + "=" + cookie['value'] + ';'
+        #print(cookies)        
+        
+        user_agent = driver.execute_script("return navigator.userAgent;")
+        #print(user_agent)                
+        
+        headers['cookie'] = cookies
+        headers['user-agent'] = user_agent
+        
+        session.headers.update(headers)
         
         driver.quit() 
         #print(1)    
 
         timeout = 3
         t = Timer(timeout, terminateChrome)
-        t.start()                                        
+        t.start()         
 
+        #timeStartRequest = time.perf_counter()
+        
+        futures = [
+            session.get('https://warthunder.ru/ru/community/userinfo/?nick=' + i[0])
+            for i in teams[1:]
+        ]
+
+        results = [
+            i.result()
+            for i in futures
+        ]
+        
+        retry = True
+        retryArr = []
+        
+        #print(results)
+        
+        while retry:
+            
+            for i in range(len(results)):
+            
+                if results[i].status_code == 429:
+                
+                    retryArr.append(i)
+            
+            futures1 = [
+                session.get('https://warthunder.ru/ru/community/userinfo/?nick=' + teams[i+1][0])
+                for i in retryArr
+            ]
+        
+            results1 = [
+                i.result()
+                for i in futures1
+            ]        
+            
+            for i in range(len(results1)):
+            
+                results[retryArr[i]] = results1[i]
+                
+            if len(retryArr) == 0:
+                retry=False
+            
+            retryArr = []
+            #print(1)
+            #print(results1)
+            #print(results)
+        
+        #print(results)
+        #timeForRequest = time.perf_counter() - timeStartRequest
+        #print('timeForRequest', timeForRequest)        
+        
+        for k in range(len(results)):
+            i = teams[k+1]
+            soup = BeautifulSoup(results[k].content, "html.parser")
+            #print(soup)
+            #allNews = soup.findAll('a', class_='lenta')
+            #elements1=soup.find_all(attrs={"class":{"ownershipPeriods-from"}})
+            #user-stat__list-row
+            #soup.select('li:nth-of-type(3)')
+            divs = soup.findAll('div', class_='user-stat__list-row')
+            if len(divs) == 0:
+                i = np.append(i, 50)
+                i = np.append(i, 0)
+                i = np.append(i, "-")
+                i = np.append(i, "-")
+                #print(i) 
+            else:   
+                wins = divs[0].select('li:nth-of-type(2)')
+                battles = divs[0].select('li:nth-of-type(3)')
+                
+                wins = wins[diffNumber].text
+                if wins == "N/A":
+                    wins = 0
+                battles = battles[diffNumber].text
+                if battles == "N/A" or battles == "0":
+                    battles = 1
+                #print(battles)
+                #print(wins)
+                winrate = round(int(wins)/int(battles)*100, 2)
+                if winrate == 0:
+                    winrate = 50
+                
+                awins = divs[0].select('li:nth-last-of-type(3)')   
+                twins = divs[0].select('li:nth-last-of-type(2)')
+                mwins = divs[0].select('li:nth-last-of-type(1)')
+                
+                awins = awins[diffNumber].text
+                if awins == "N/A":
+                    awins = 0 
+                twins = twins[diffNumber].text
+                if twins == "N/A":
+                    twins = 0 
+                mwins = mwins[diffNumber].text
+                if mwins == "N/A":
+                    mwins = 0      
+                sumwins = int(awins)+int(twins)+int(mwins)
+                kd = round(sumwins/int(battles), 2) 
+                
+                timeIstr = divs[1].select('li:nth-of-type(6)')
+                timesShturm = divs[1].select('li:nth-of-type(8)')
+                
+                timeIstr = timeIstr[diffNumber].text
+                if timeIstr == "N/A":
+                    timeIstr = '-'   
+                timesShturm = timesShturm[diffNumber].text
+                if timesShturm == "N/A":
+                    timesShturm = '-'
+                    
+                i = np.append(i, winrate)
+                i = np.append(i, kd)
+                i = np.append(i, timeIstr)
+                i = np.append(i, timesShturm)                     
+            if i[1] == '2':
+                team2.append(i)
+            else:
+                team1.append(i)                
+            #print(i)                                               
 
 
     def dexor(data, key):
