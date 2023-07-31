@@ -49,7 +49,3 @@
 Чтобы отключить оверлей, откройте файл `buttons.ini` и удалите знак `+` напротив соответствующей строки
 
 <img src="https://github.com/Yonisen/Warthunder_CheckTeamStat/blob/main/data/screen7.png">
-
-### Поддержать
-Вы можете поддержать меня здесь:<br>
-https://www.donationalerts.com/r/yonisen
